@@ -16,15 +16,15 @@ dotenv.config();
 
 const db = mysql.createConnection({
 
-          host: process.env.DB_HOST,
+    host: process.env.DB_HOST,
 
-          port: process.env.DB_PORT,
+    port: process.env.DB_PORT,
 
-          user: process.env.DB_USER,
+    user: process.env.DB_USER,
 
-          password: process.env.DB_PASSWORD,
+    password: process.env.DB_PASSWORD,
 
-          database: process.env.DB_DATABASE,
+    database: process.env.DB_DATABASE,
 
 });
 
@@ -32,9 +32,9 @@ const db = mysql.createConnection({
 
 db.connect(err => {
 
-          if (err) throw err;
+    if (err) throw err;
 
-          console.log('✅ Connected to MySQL');
+    console.log('✅ Connected to MySQL');
 
 });
 
@@ -48,7 +48,7 @@ app.use(express.json());
 
 app.get('/', (req, res) => {
 
-          res.send('hi');
+    res.send('hi');
 
 });
 
@@ -58,13 +58,13 @@ app.get('/', (req, res) => {
 
 app.get('/products', (req, res) => {
 
-          db.query('SELECT * FROM products WHERE is_deleted = 0', (err, results) => {
+    db.query('SELECT * FROM products WHERE is_deleted = 0', (err, results) => {
 
-                    if (err) return res.status(500).json({ error: err.message });
+        if (err) return res.status(500).json({ error: err.message });
 
-                    res.json(results);
+        res.json(results);
 
-          });
+    });
 
 });
 
@@ -74,13 +74,13 @@ app.get('/products', (req, res) => {
 
 app.get('/products/:id', (req, res) => {
 
-          db.query('SELECT * FROM products WHERE id = ? AND is_deleted = 0', [req.params.id], (err, results) => {
+    db.query('SELECT * FROM products WHERE id = ? AND is_deleted = 0', [req.params.id], (err, results) => {
 
-                    if (err) return res.status(500).json({ error: err.message });
+        if (err) return res.status(500).json({ error: err.message });
 
-                    res.json(results[0] || {});
+        res.json(results[0] || {});
 
-          });
+    });
 
 });
 
@@ -90,15 +90,15 @@ app.get('/products/:id', (req, res) => {
 
 app.get('/products/search/:keyword', (req, res) => {
 
-          const keyword = `%${req.params.keyword}%`;
+    const keyword = `%${req.params.keyword}%`;
 
-          db.query('SELECT * FROM products WHERE name LIKE ? AND is_deleted = 0', [keyword], (err, results) => {
+    db.query('SELECT * FROM products WHERE name LIKE ? AND is_deleted = 0', [keyword], (err, results) => {
 
-                    if (err) return res.status(500).json({ error: err.message });
+        if (err) return res.status(500).json({ error: err.message });
 
-                    res.json(results);
+        res.json(results);
 
-          });
+    });
 
 });
 
@@ -108,17 +108,17 @@ app.get('/products/search/:keyword', (req, res) => {
 
 app.post('/products', (req, res) => {
 
-          const { name, price, discount, review_count, image_url } = req.body;
+    const { name, price, discount, review_count, image_url } = req.body;
 
-          const query = 'INSERT INTO products (name, price, discount, review_count, image_url) VALUES (?, ?, ?, ?, ?)';
+    const query = 'INSERT INTO products (name, price, discount, review_count, image_url) VALUES (?, ?, ?, ?, ?)';
 
-          db.query(query, [name, price, discount, review_count, image_url], (err, result) => {
+    db.query(query, [name, price, discount, review_count, image_url], (err, result) => {
 
-                    if (err) return res.status(500).json({ error: err.message });
+        if (err) return res.status(500).json({ error: err.message });
 
-                    res.status(201).json({ id: result.insertId, message: 'Product created' });
+        res.status(201).json({ id: result.insertId, message: 'Product created' });
 
-          });
+    });
 
 });
 
@@ -128,17 +128,17 @@ app.post('/products', (req, res) => {
 
 app.put('/products/:id', (req, res) => {
 
-          const { name, price, discount, review_count, image_url } = req.body;
+    const { name, price, discount, review_count, image_url } = req.body;
 
-          const query = 'UPDATE products SET name = ?, price = ?, discount = ?, review_count = ?, image_url = ? WHERE id = ?';
+    const query = 'UPDATE products SET name = ?, price = ?, discount = ?, review_count = ?, image_url = ? WHERE id = ?';
 
-          db.query(query, [name, price, discount, review_count, image_url, req.params.id], err => {
+    db.query(query, [name, price, discount, review_count, image_url, req.params.id], err => {
 
-                    if (err) return res.status(500).json({ error: err.message });
+        if (err) return res.status(500).json({ error: err.message });
 
-                    res.json({ message: 'Product updated' });
+        res.json({ message: 'Product updated' });
 
-          });
+    });
 
 });
 
@@ -148,13 +148,13 @@ app.put('/products/:id', (req, res) => {
 
 app.delete('/products/:id', (req, res) => {
 
-          db.query('UPDATE products SET is_deleted = 1 WHERE id = ?', [req.params.id], err => {
+    db.query('UPDATE products SET is_deleted = 1 WHERE id = ?', [req.params.id], err => {
 
-                    if (err) return res.status(500).json({ error: err.message });
+        if (err) return res.status(500).json({ error: err.message });
 
-                    res.json({ message: 'Product soft-deleted' });
+        res.json({ message: 'Product soft-deleted' });
 
-          });
+    });
 
 });
 
@@ -164,13 +164,13 @@ app.delete('/products/:id', (req, res) => {
 
 app.put('/products/restore/:id', (req, res) => {
 
-          db.query('UPDATE products SET is_deleted = 0 WHERE id = ?', [req.params.id], err => {
+    db.query('UPDATE products SET is_deleted = 0 WHERE id = ?', [req.params.id], err => {
 
-                    if (err) return res.status(500).json({ error: err.message });
+        if (err) return res.status(500).json({ error: err.message });
 
-                    res.json({ message: 'Product restored' });
+        res.json({ message: 'Product restored' });
 
-          });
+    });
 
 });
 
@@ -180,6 +180,6 @@ app.put('/products/restore/:id', (req, res) => {
 
 app.listen(PORT, () => {
 
-          console.log(`🚀 Server is running at http://localhost:${PORT}`);
+    console.log(`🚀 Server is running at http://localhost:${PORT}`);
 
 });
