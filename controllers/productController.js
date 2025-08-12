@@ -19,31 +19,36 @@ const productController = {
     },
 
     searchProducts: (req, res) => {
-        Product.searchByKeyword(req.params.keyword, (err, results) => {
+        const keyword = req.query.q || '';
+        Product.searchByKeyword(keyword, (err, results) => {
             if (err) return res.status(500).json({ error: err.message });
-            res.json(results);
+            res.render('products', { products: results, q: keyword });
         });
     },
 
+
     createProduct: (req, res) => {
-        const id = uuidv4();
-        Product.create({ id, ...req.body }, (err) => {
+        Product.create(req.body, (err, insertId) => {
             if (err) return res.status(500).json({ error: err.message });
-            res.status(201).json({ id, message: 'Product created' });
+            // res.status(201).json({ id: insertId, message: 'Product created' });
+            res.redirect('/api');
         });
     },
 
     updateProduct: (req, res) => {
         Product.update(req.params.id, req.body, (err) => {
             if (err) return res.status(500).json({ error: err.message });
-            res.json({ message: 'Product updated' });
+            // res.json({ message: 'Product updated' });
+            res.redirect('/api');
         });
     },
+
 
     softDeleteProduct: (req, res) => {
         Product.softDelete(req.params.id, (err) => {
             if (err) return res.status(500).json({ error: err.message });
-            res.json({ message: 'Product soft-deleted' });
+            // res.json({ message: 'Product soft-deleted' });
+            res.redirect('/api');
         });
     },
 

@@ -3,6 +3,7 @@ const dotenv = require('dotenv');
 const productRoutes = require('./routes/productRoutes');
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./config/swagger');
+const methodOverride = require('method-override');
 
 const app = express();
 const PORT = 3000;
@@ -10,6 +11,8 @@ const PORT = 3000;
 dotenv.config();
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(methodOverride('_method'));
 app.use('/api', productRoutes);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 

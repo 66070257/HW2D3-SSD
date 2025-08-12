@@ -140,24 +140,47 @@
         <button type="submit">Create</button>
     </form>
 
+    <form action="/api/search/:keyword" method="GET" style="max-width: 1000px; margin: 0 auto 20px auto;">
+        <input type="text" name="q" placeholder="Search products..." value="<%= typeof q !== 'undefined' ? q : '' %>"
+            style="width: 100%; padding: 10px; font-size: 16px; border-radius: 5px; border: 1px solid #ccc;">
+        <button type="submit"
+            style="margin-top: 10px; padding: 10px 15px; background-color: #3498db; color: white; border:none; border-radius: 5px; cursor:pointer;">
+            Search
+        </button>
+    </form>
+
     <h1>Products List</h1>
     <ul>
-        <% products.forEach(product => { %>
+        <% products.forEach(product=> { %>
             <li>
-                <div>
+                <div class="product-item">
                     <a href="/api/<%= product.id %>" class="product-link">
                         <%= product.name %>
                     </a>
                     <span class="price">$<%= product.price %></span>
                 </div>
+
+                <div>
+                    <span class="discount">Discount: <%= product.discount %>%</span>
+                </div>
+
+                <div class="reviews">
+                    Reviews: <%= product.review_count %>
+                </div>
+
+                <div class="image">
+                    <img src="<%= product.image_url %>" alt="<%= product.name %>" style="max-width:150px; height:auto;">
+                </div>
+
                 <div class="actions">
                     <form action="/api/<%= product.id %>?_method=DELETE" method="POST" style="display:inline;">
                         <button type="submit" title="Soft Delete">Soft Delete</button>
                     </form>
                 </div>
             </li>
-        <% }) %>
+            <% }) %>
     </ul>
+
 
 </body>
 

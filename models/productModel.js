@@ -14,11 +14,14 @@ const productModel = {
     },
 
     create: (data, callback) => {
-        const { id, name, price, discount, review_count, image_url } = data;
+        const { name, price, discount, review_count, image_url } = data;
         db.query(
-            'INSERT INTO products (id, name, price, discount, review_count, image_url) VALUES (?, ?, ?, ?, ?, ?)',
-            [id, name, price, discount, review_count, image_url],
-            callback
+            'INSERT INTO products (name, price, discount, review_count, image_url) VALUES (?, ?, ?, ?, ?)',
+            [name, price, discount, review_count, image_url],
+            (err, result) => {
+                if (err) return callback(err);
+                callback(null, result.insertId);
+            }
         );
     },
 
